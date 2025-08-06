@@ -1,0 +1,80 @@
+/*
+ * Global styling for the Snake game.  A simple retro feel is achieved
+ * using monospace fonts, muted backgrounds and clear colours for the
+ * snake and food.  Everything is centred on the page using flexbox.
+ */
+
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    line-height: 1.5;
+}
+
+header h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #2e7d32; /* dark green for a retro feel */
+}
+
+/* Score display styling */
+#score {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Center and style the canvas */
+#gameCanvas {
+    border: 2px solid #999;
+    background-color: #000;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Restart button styling */
+#restart-btn {
+    margin-top: 15px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #fafafa;
+    border: 1px solid #999;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#restart-btn:hover {
+    background-color: #e0e0e0;
+}
+
+#restart-btn:active {
+    transform: scale(0.97);
+}
+
+/* Instruction text styling */
+.instructions {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+    max-width: 400px;
+}
