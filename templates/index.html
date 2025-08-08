@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
-    <!-- Link to the external CSS for styling -->
-    <link rel="stylesheet" href="style.css">
-    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake Game</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Load once, deferred -->
+  <script defer src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <header>
-        <h1>Classic Snake</h1>
-    </header>
+  <header>
+    <h1>Classic Snake</h1>
+  </header>
 
-    <!-- Display the current score -->
-    <div id="score">Score: 0</div>
+  <!-- Score label + number separated so JS can update only the number -->
+  <div class="score"> <span id="score">0</span></div>
 
-    <!-- The canvas where the snake game will be drawn -->
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-    <!-- Restart control. Clicking will restart the game. -->
-    <button id="restart-btn" type="button">Play Again</button>
+  <!-- You can keep this controls block or let the JS auto-inject one. Either is fine. -->
+  <div class="controls" aria-label="Touch controls">
+    <button class="btn dir-up"    data-dx="0"  data-dy="-1" aria-label="Up">▲</button>
+    <button class="btn dir-left"  data-dx="-1" data-dy="0"  aria-label="Left">◀</button>
+    <button class="btn dir-right" data-dx="1"  data-dy="0"  aria-label="Right">▶</button>
+    <button class="btn dir-down"  data-dx="0"  data-dy="1"  aria-label="Down">▼</button>
+  </div>
 
-    <!-- Instructions for keyboard controls -->
-    <p class="instructions">Use the arrow keys to move the snake. Press space or click the button to restart after a game over.</p>
+  <!-- Match the id my script expects -->
+<button id="restart-btn" type="button">Play Again</button>
 
-    <!-- Link to the game logic -->
-    <script src="script.js"></script>
+  <p class="instructions">
+    Use the arrow keys to move the snake. Tap the on-screen arrows on mobile. Click Play Again to restart.
+  </p>
 </body>
 </html>
