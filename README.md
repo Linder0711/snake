@@ -1,3 +1,5 @@
+![Snake Gameplay Screenshot](snake_banner.png)
+
 # 🐍 Snake
 
 **A modern browser-based Snake game built with Flask, JavaScript, HTML, and CSS.**
