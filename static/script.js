@@ -49,8 +49,6 @@ function startRandomMusic() {
   bgMusic = new Audio(selectedTrack);
   bgMusic.loop = true;
   bgMusic.volume = 0.4;
-
-  // Some browsers need a user interaction before play() works
   bgMusic.play().catch(() => {});
 }
 
@@ -80,9 +78,8 @@ function init() {
   });
 }
 
-// In your start button click event
 startBtn.addEventListener('click', () => {
-  unlockSounds();   // wake them up on the first tap
+  unlockSounds();   
   document.getElementById('startContainer').style.display = 'none';
   init();
 });
@@ -231,7 +228,6 @@ sndCrash.play().catch(() => {});
     // reveal the form
     formContainer.style.display = 'block';
   }
-  // === New bits end here ===
 }
 
 // Keyboard controls (prevents reversal)
@@ -275,14 +271,11 @@ function setNextDirection(dx, dy) {
   nextDirection = { x: dx, y: dy };
 }
 
-// D-pad wiring (works with your existing HTML controls or injects one)
 function ensureControls() {
   let controls = document.querySelector('.controls');
   if (!controls) {
-    // Inject a simple D-pad if none present
     controls = document.createElement('div');
     controls.className = 'controls';
-    // Minimal inline styles to ensure usability without CSS changes
     Object.assign(controls.style, {
       display: 'grid',
       gridTemplateColumns: '80px 80px 80px',
@@ -319,11 +312,9 @@ function ensureControls() {
     controls.appendChild(makeBtn('▶', 1, 0, 3, 2));
     controls.appendChild(makeBtn('▼', 0, 1, 2, 3));
 
-    // place after canvas
     canvas.parentNode.insertBefore(controls, canvas.nextSibling);
   }
 
-  // Pointer handler for all buttons with data-dx/dy
   controls.addEventListener('pointerdown', (e) => {
     const btn = e.target.closest('button[data-dx]');
     if (!btn) return;
@@ -340,7 +331,6 @@ let touchStartY = null;
 
 function onTouchStart(e) {
   if (!e.touches || e.touches.length === 0) return;
-  // Prevent page scroll if starting on the canvas or controls
   if (e.target === canvas || e.target.closest('.controls')) e.preventDefault();
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
