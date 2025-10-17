@@ -14,25 +14,63 @@
   <header>
     <h1>Classic Snake</h1>
   </header>
+  <button id="toggleSound">🔈</button>
 
-  <!-- Score label + number separated so JS can update only the number -->
-  <div class="score"> <span id="score">0</span></div>
+  <div class="game-layout">
+  <div class="game-area">
+    <div class="score"><span id="score">0</span></div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-  <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="startContainer" style="text-align:center; margin-top:15px;">
+      <button id="startBtn">Start Game</button>
+    </div>
 
-  <!-- You can keep this controls block or let the JS auto-inject one. Either is fine. -->
-  <div class="controls" aria-label="Touch controls">
-    <button class="btn dir-up"    data-dx="0"  data-dy="-1" aria-label="Up">▲</button>
-    <button class="btn dir-left"  data-dx="-1" data-dy="0"  aria-label="Left">◀</button>
-    <button class="btn dir-right" data-dx="1"  data-dy="0"  aria-label="Right">▶</button>
-    <button class="btn dir-down"  data-dx="0"  data-dy="1"  aria-label="Down">▼</button>
+    <div id="scoreFormContainer" style="display:none; text-align:center; margin-top:20px;">
+      <h3>Submit your score</h3>
+      <form id="scoreForm" method="POST" action="/">
+        <input type="text" name="name" id="playerName" placeholder="Enter your name" required>
+        <input type="hidden" name="points" id="playerScore">
+        <button type="submit">Submit Score</button>
+      </form>
+    </div>
+
+    <div class="controls" aria-label="Touch controls">
+      <button class="btn dir-up" data-dx="0" data-dy="-1" aria-label="Up">▲</button>
+      <button class="btn dir-left" data-dx="-1" data-dy="0" aria-label="Left">◀</button>
+      <button class="btn dir-right" data-dx="1" data-dy="0" aria-label="Right">▶</button>
+      <button class="btn dir-down" data-dx="0" data-dy="1" aria-label="Down">▼</button>
+    </div>
+
+    <button id="restart-btn" type="button">Play Again</button>
+
+    <p class="instructions">
+      Use the arrow keys to move the snake. Tap the on-screen arrows on mobile. Click Play Again to restart.
+    </p>
   </div>
 
-  <!-- Match the id my script expects -->
-<button id="restart-btn" type="button">Play Again</button>
+  <button id="toggleLeaderboardBtn" class="toggle-leaderboard">🏆 Show Leaderboard</button>
 
-  <p class="instructions">
-    Use the arrow keys to move the snake. Tap the on-screen arrows on mobile. Click Play Again to restart.
-  </p>
+<div class="leaderboard-area" id="leaderboard">
+  <div class="leaderboard-header">
+    <h2>Leaderboard</h2>
+    <button id="closeLeaderboardBtn" class="close-leaderboard">×</button>
+  </div>
+  <table class="leaderboard-table">
+    <tr>
+      <th>Name</th>
+      <th>Score</th>
+      <th>Date</th>
+    </tr>
+    {% for s in score %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.score }}</td>
+      <td>{{ s.date_happened }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</div>
+
 </body>
 </html>

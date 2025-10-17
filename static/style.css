@@ -1,137 +1,102 @@
-/*
- * Global styling for the Snake game.  A simple retro feel is achieved
- * using monospace fonts, muted backgrounds and clear colours for the
- * snake and food.  Everything is centred on the page using flexbox.
- */
-
-/* Reset default margins and paddings */
+/* =========================================================
+   GLOBAL BASE – dark futuristic neon theme
+   ========================================================= */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
-    height: 100%;
-    width: 100%;
-    font-family: "Courier New", Courier, monospace;
-    background-color: #f0f0f0;
-    color: #333;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 20px;
-    line-height: 1.5;
-}
-
-header h1 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #2e7d32; /* dark green for a retro feel */
-}
-
-/* Score display styling */
-#score {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-/* Restart button styling */
-#restart-btn {
-    margin-top: 15px;
-    padding: 8px 16px;
-    font-size: 1rem;
-    font-family: inherit;
-    background-color: #fafafa;
-    border: 1px solid #999;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-#restart-btn:hover {
-    background-color: #e0e0e0;
-}
-
-#restart-btn:active {
-    transform: scale(0.97);
-}
-
-/* Instruction text styling */
-.instructions {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #555;
-    text-align: center;
-    max-width: 400px;
-}
-.controls {
-  display: grid;
-  grid-template-columns: 80px 80px 80px;
-  grid-template-rows: 80px 80px 80px;
-  gap: 8px;
-  margin-top: 16px;
-  touch-action: none; /* prevent swipe-scroll while pressing */
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Position the four buttons in a D-pad layout */
-.dir-up    { grid-column: 2; grid-row: 1; }
-.dir-left  { grid-column: 1; grid-row: 2; }
-.dir-right { grid-column: 3; grid-row: 2; }
-.dir-down  { grid-column: 2; grid-row: 3; }
-
-.controls .btn {
-  font-size: 28px;
-  border: 2px solid #333;
-  border-radius: 12px;
-  padding: 0;
-  width: 100%;
   height: 100%;
-  background: #f7f7f7;
-}
-
-.controls .btn:active {
-  transform: scale(0.98);
-}
-
-/* Only show on touch devices; keep desktop clean */
-@media (hover: hover) and (pointer: fine) {
-  .controls { display: none; }
-}
-
-/* Let it scale on very small screens */
-@media (max-width: 360px) {
-  .controls {
-    grid-template-columns: 64px 64px 64px;
-    grid-template-rows: 64px 64px 64px;
-  }
-}
-/* Lock the canvas to the exact internal size */
-#gameCanvas {
-  box-sizing: content-box;   /* ignore the global border-box for canvas */
-  width: 400px;
-  height: 400px;
-  padding: 0;
-  border: 2px solid #333;    /* keep if you like; purely visual */
-  background: #000;
-  display: block;
-  margin: 12px auto;
-  image-rendering: pixelated;
-}
-
-.score {
-  font-size: 20px;
-  margin: 8px 0;
+  width: 100%;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #020024 0%, #000000 100%);
+  color: #00eaff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  line-height: 1.5;
   text-align: center;
 }
 
+/* =========================================================
+   HEADERS
+   ========================================================= */
+h1, h2, h3 {
+  letter-spacing: 3px;
+  color: #00eaff;
+  text-shadow: 0 0 8px #00ffff, 0 0 20px #0088ff;
+  margin-bottom: 20px;
+}
+
+/* =========================================================
+   SCORE + CANVAS AREA
+   ========================================================= */
+.score {
+  font-size: 1.5rem;
+  color: #ff00ff;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff88;
+  margin-bottom: 10px;
+}
+
+#gameCanvas {
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 10, 20, 0.8);
+  border: 2px solid #00eaff;
+  box-shadow: 0 0 25px #00ffff66, inset 0 0 10px #00ffff33;
+  display: block;
+  margin: 0 auto 15px;
+  image-rendering: pixelated;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+button {
+  background: transparent;
+  color: #00eaff;
+  border: 2px solid #00eaff;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px #00ffff;
+  box-shadow: 0 0 10px #00ffff55;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 5px;
+}
+
+button:hover {
+  background: #00ffff11;
+  box-shadow: 0 0 20px #00ffffaa;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* =========================================================
+   SCORE SUBMISSION MODAL
+   ========================================================= */
+#scoreFormContainer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+}
+
+/* =========================================================
+   D-PAD CONTROLS (MOBILE)
+   ========================================================= */
 .controls {
   display: grid;
   grid-template-columns: 80px 80px 80px;
@@ -152,15 +117,169 @@ header h1 {
 
 .controls .btn {
   font-size: 28px;
-  border: 2px solid #333;
+  border: 2px solid #00eaff;
   border-radius: 12px;
   width: 100%;
   height: 100%;
-  background: #f7f7f7;
+  background: rgba(0,0,0,0.4);
+  color: #00eaff;
+  box-shadow: 0 0 8px #00ffff55;
 }
 
+.controls .btn:active { transform: scale(0.95); }
+
 @media (hover: hover) and (pointer: fine) {
-  /* Hide touch controls on desktop if you want a cleaner look */
   .controls { display: none; }
 }
 
+/* =========================================================
+   LAYOUT STRUCTURE
+   ========================================================= */
+.game-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* =========================================================
+   LEADERBOARD
+   ========================================================= */
+.leaderboard-area {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 0 15px #00ffff33, inset 0 0 10px #00ffff22;
+  color: #00eaff;
+  min-width: 220px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.leaderboard-area h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: monospace;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  border-bottom: 1px solid #00ffff33;
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.leaderboard-table th {
+  background: rgba(0, 255, 255, 0.1);
+  color: #00eaff;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background-color: rgba(0,255,255,0.05);
+}
+
+/* =========================================================
+   MOBILE ADJUSTMENTS
+   ========================================================= */
+@media (max-width: 700px) {
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .leaderboard-area {
+    width: 90%;
+    max-width: 350px;
+    order: 3;
+  }
+
+  .game-area { order: 1; }
+
+  canvas {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+}
+
+/* =========================================================
+   MOBILE PORTRAIT: SLIDE-UP LEADERBOARD
+   ========================================================= */
+.toggle-leaderboard {
+  display: none;
+  margin-top: 10px;
+  background: transparent;
+  color: #00eaff;
+  border: 2px solid #00eaff;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 16px;
+  box-shadow: 0 0 10px #00ffff55;
+}
+
+@media (max-width: 700px) and (orientation: portrait) {
+  .toggle-leaderboard { display: inline-block; }
+
+  .leaderboard-area {
+    display: none;
+    position: fixed;
+    bottom: -100%;
+    left: 0; right: 0;
+    background: #000;
+    color: #00eaff;
+    max-height: 70%;
+    overflow-y: auto;
+    border-top: 3px solid #00ffff;
+    border-radius: 10px 10px 0 0;
+    z-index: 50;
+    transition: bottom 0.3s ease-in-out;
+    padding: 10px 15px;
+  }
+
+  .leaderboard-area.active {
+    display: block;
+    bottom: 0;
+  }
+
+  .leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #00ffff55;
+    margin-bottom: 10px;
+  }
+
+  .close-leaderboard {
+    background: none;
+    border: none;
+    color: #00eaff;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .leaderboard-table th, .leaderboard-table td {
+    border-bottom: 1px solid #00ffff33;
+    padding: 6px 8px;
+  }
+}

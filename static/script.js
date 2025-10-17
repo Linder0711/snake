@@ -21,9 +21,75 @@ let food;           // {x,y}
 let score;
 let gameInterval;   // setInterval id
 let gameOver;
+// === MUSIC SETUP ===
 
+// List of available background tracks
+const musicTracks = [
+  "/static/sounds/bg1.mp3",
+  "/static/sounds/bg2.mp3",
+  "/static/sounds/bg3.mp3",
+  "/static/sounds/bg4.mp3",
+  "/static/sounds/bg5.mp3"
+];
+
+let bgMusic = null; // holds the current Audio object
+
+function startRandomMusic() {
+  // Stop previous track if playing
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic = null;
+  }
+
+  // Pick a random track
+  const randomIndex = Math.floor(Math.random() * musicTracks.length);
+  const selectedTrack = musicTracks[randomIndex];
+
+  // Load and play
+  bgMusic = new Audio(selectedTrack);
+  bgMusic.loop = true;
+  bgMusic.volume = 0.4;
+
+  // Some browsers need a user interaction before play() works
+  bgMusic.play().catch(() => {});
+}
+
+function stopMusic() {
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+}
+
+const sndEat = new Audio("/static/sounds/eat.wav");
+const sndStart = new Audio("/static/sounds/start.wav");
+const sndCrash = new Audio("/static/sounds/crash.wav");
+[sndEat, sndStart, sndCrash].forEach(snd => {
+  snd.preload = "auto";
+  snd.volume = 0.6;
+});
+sndCrash.volume = 0.7;
 // Init or reset
 function init() {
+  function unlockSounds() {
+  [sndEat, sndStart, sndCrash].forEach(snd => {
+    snd.play().then(() => {
+      snd.pause();
+      snd.currentTime = 0;
+    }).catch(() => {});
+  });
+}
+
+// In your start button click event
+startBtn.addEventListener('click', () => {
+  unlockSounds();   // wake them up on the first tap
+  document.getElementById('startContainer').style.display = 'none';
+  init();
+});
+  stopMusic();
+  startRandomMusic();
+  sndStart.currentTime = 0;
+  sndStart.play().catch(() => {});
   const startX = Math.floor(tileCountX / 2);
   const startY = Math.floor(tileCountY / 2);
   snake = [{ x: startX, y: startY }];
@@ -42,6 +108,17 @@ function init() {
 // Score UI
 function updateScore() {
   scoreDisplay.textContent = `Score: ${score}`;
+}
+function drawStartScreen() {
+  ctx.fillStyle = '#001';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#00eaff';
+  ctx.font = '24px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('Snake', canvas.width / 2, canvas.height / 2 - 10);
+  ctx.font = '16px Courier New';
+  ctx.fillText('Press Start or space to Play', canvas.width / 2, canvas.height / 2 + 20);
 }
 
 // Food spawn (on-grid, never outside)
@@ -86,37 +163,52 @@ function gameLoop() {
   snake.unshift(newHead);
 
   // eat
-  if (newHead.x === food.x && newHead.y === food.y) {
-    score++;
-    updateScore();
-    generateFood();
-  } else {
-    snake.pop();
-  }
+if (newHead.x === food.x && newHead.y === food.y) {
+  score++;
+  updateScore();
+  sndEat.currentTime = 0;
+  sndEat.play().catch(() => {});
+  generateFood();
+} else {
+  snake.pop();
+}
+
 
   draw();
 }
 
 // Render
 function draw() {
-  // board
-  ctx.fillStyle = '#000';
+  // background grid-like field
+  ctx.fillStyle = '#001';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // snake
-  ctx.fillStyle = '#00ff00';
+  ctx.fillStyle = '#00ffff';
   snake.forEach(seg => {
-    ctx.fillRect(seg.x * gridSize, seg.y * gridSize, gridSize, gridSize);
+    ctx.shadowColor = '#00ffff';
+    ctx.shadowBlur = 10;
+    ctx.fillRect(seg.x * gridSize, seg.y * gridSize, gridSize - 1, gridSize - 1);
   });
+  ctx.shadowBlur = 0;
 
   // food
-  ctx.fillStyle = '#ff0000';
-  ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+  ctx.fillStyle = '#ff00ff';
+  ctx.shadowColor = '#ff00ff';
+  ctx.shadowBlur = 10;
+  ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 1, gridSize - 1);
+  ctx.shadowBlur = 0;
 }
 
 // Game over state
 function endGame() {
+  sndCrash.currentTime = 0;
+sndCrash.play().catch(() => {});
+
+  stopMusic();
+
   gameOver = true;
+  
   clearInterval(gameInterval);
 
   ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -128,6 +220,18 @@ function endGame() {
   ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 10);
   ctx.font = '16px Courier New';
   ctx.fillText('Press Space or Play Again', canvas.width / 2, canvas.height / 2 + 20);
+
+  const formContainer = document.getElementById('scoreFormContainer');
+  const scoreInput = document.getElementById('playerScore');
+
+  if (formContainer && scoreInput) {
+    // populate hidden score field
+    scoreInput.value = score;
+
+    // reveal the form
+    formContainer.style.display = 'block';
+  }
+  // === New bits end here ===
 }
 
 // Keyboard controls (prevents reversal)
@@ -137,10 +241,12 @@ function handleKeydown(event) {
     event.preventDefault();
   }
 
-  if (gameOver) {
-    if (key === ' ') init();
-    return;
-  }
+if (!gameInterval && !gameOver && key === ' ') {
+  document.getElementById('startContainer').style.display = 'none';
+  init();
+  return;
+}
+
 
   switch (key) {
     case 'ArrowUp':
@@ -269,9 +375,34 @@ document.addEventListener('keydown', handleKeydown, { passive: false });
 restartBtn.addEventListener('click', init);
 document.addEventListener('touchstart', onTouchStart, { passive: false });
 document.addEventListener('touchend', onTouchEnd, { passive: true });
+const toggleSoundBtn = document.getElementById("toggleSound");
+if (toggleSoundBtn) {
+  toggleSoundBtn.addEventListener("click", () => {
+    if (bgMusic) bgMusic.muted = !bgMusic.muted;
+  });
 
+};
 // Boot
 window.addEventListener('load', () => {
   ensureControls();
-  init();
+
+  const startBtn = document.getElementById('startBtn');
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      document.getElementById('startContainer').style.display = 'none';
+      init();
+    });
+  }
+document.getElementById('toggleLeaderboardBtn')?.addEventListener('click', () => {
+  const board = document.getElementById('leaderboard');
+  if (board) board.classList.add('active');
+});
+
+document.getElementById('closeLeaderboardBtn')?.addEventListener('click', () => {
+  const board = document.getElementById('leaderboard');
+  if (board) board.classList.remove('active');
+});
+
+  // Draw a static board before starting
+  drawStartScreen();
 });
